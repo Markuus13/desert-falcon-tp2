@@ -1,4 +1,4 @@
-load 'GameObject.rb'
+require_relative 'GameObject'
 
 
 class Hiero < GameObject

@@ -1,3 +1,5 @@
+require_relative 'GameObject'
+
 
 class Sprite
   public
