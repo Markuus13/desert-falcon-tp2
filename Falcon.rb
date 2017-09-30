@@ -2,22 +2,28 @@ require_relative 'GameObject'
 
 
 class Falcon < GameObject
+
   public
 
+  attr_accessor :x, :y, :z, :x_vel, :y_vel, :z_vel, :box
+
   def initialize(x_pos, y_pos, z_pos)
-    @image = Gosu::Image.new("assets/images/falcon.png")
-    @x = x_pos
-    @y = y_pos
+    @image = Sprite.new("assets/images/falcon.png")
+    puts "image.width = #{@image.width}"
+    puts "image.height = #{@image.height}"
+    @box = Box.new(x_pos, y_pos, @image.width, @image.height)
     @z = z_pos
 
-    @x_vel = @y_vel = @z_vel = 1
+    @x_vel = 3
+    @y_vel = 1.5
+    @z_vel = 40
+    #sleep(5)
   end
 
-  def update
-  end
+  def update; end
 
   def draw
-    @image.draw(@x, @y, 1)
+    @image.render(@box.x, @box.y, 1)
   end
 
   def notifyCollision(object)
@@ -25,24 +31,34 @@ class Falcon < GameObject
 
   def move_left
     puts "Falcon moved left"
-    @x -= 2
-    @y -= 1
+    @box.x -= @x_vel
+    @box.y -= @y_vel
   end
 
   def move_right
     puts "Falcon moved right"
-    @x += 2
-    @y += 1
+    @box.x += @x_vel
+    @box.y += @y_vel
   end
 
   def move_up
     puts "Falcon moved up"
-    @y -= 2
+    if @z < 1
+      @z += @y_vel
+      @box.y -= @z_vel
+      ## ISSO AQUI É GAMBIARRA!!! TEM QUE ARRUMAR DEPOIS
+      sleep(0.2)
+    end
   end
 
   def move_down
     puts "Falcon moved down"
-    @y += 2
+    if @z > -1
+      @z -= @y_vel
+      @box.y += @z_vel
+      ## ISSO AQUI É GAMBIARRA!!! TEM QUE ARRUMAR DEPOIS
+      sleep(0.2)
+    end
   end
 
 end

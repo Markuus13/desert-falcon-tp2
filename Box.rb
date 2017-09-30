@@ -1,8 +1,7 @@
-require_relative 'GameObject'
-
-
 class Box
   public
+
+  attr_accessor :x, :y, :width, :height
 
   def initialize(x_pos, y_pos, width, height)
     @x = x_pos
