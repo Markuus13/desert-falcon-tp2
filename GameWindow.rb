@@ -49,20 +49,21 @@ class GameWindow < Gosu::Window
     y_next_left  = f_box.y - @falcon.y_vel
     x_next_right = f_box.x + f_box.width + @falcon.x_vel
     y_next_right = f_box.y + f_box.height + @falcon.y_vel
-    # #z_next_up    = @falcon
-    # #z_next_down  = 
+    z_next_up    = f_box.y - @falcon.z_vel
+    z_next_down  = f_box.y + f_box.height + @falcon.z_vel
 
     @falcon.move_left  if (Gosu.button_down? Gosu::KbLeft)  &&
-                          x_next_left > 0 && y_next_left > 0
-                          # (@falcon.x - @falcon.x_vel) > 0   &&
-                          # (@falcon.y - @falcon.y_vel) > 0
+                          x_next_left  > 0                  &&
+                          y_next_left  > 0
+
     @falcon.move_right if (Gosu.button_down? Gosu::KbRight) &&
-                          x_next_right < self.width &&
+                          x_next_right < self.width         &&
                           y_next_right < self.height
-                          # (@falcon.x + @falcon.x_vel) < self.width &&
-                          # (@falcon.y + @falcon)
-    @falcon.move_up    if (Gosu.button_down? Gosu::KbUp)    #&&
-    @falcon.move_down  if (Gosu.button_down? Gosu::KbDown)  #&&
+
+    @falcon.move_up    if (Gosu.button_down? Gosu::KbUp)    &&
+                          z_next_up    > 0
+    @falcon.move_down  if (Gosu.button_down? Gosu::KbDown)  &&
+                          z_next_down  < self.height
 
 
     # Move Hiero

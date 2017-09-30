@@ -17,7 +17,6 @@ class Falcon < GameObject
     @x_vel = 3
     @y_vel = 1.5
     @z_vel = 40
-    #sleep(5)
   end
 
   def update; end
@@ -44,7 +43,7 @@ class Falcon < GameObject
   def move_up
     puts "Falcon moved up"
     if @z < 1
-      @z += @y_vel
+      @z += 1
       @box.y -= @z_vel
       ## ISSO AQUI É GAMBIARRA!!! TEM QUE ARRUMAR DEPOIS
       sleep(0.2)
@@ -54,7 +53,7 @@ class Falcon < GameObject
   def move_down
     puts "Falcon moved down"
     if @z > -1
-      @z -= @y_vel
+      @z -= 1
       @box.y += @z_vel
       ## ISSO AQUI É GAMBIARRA!!! TEM QUE ARRUMAR DEPOIS
       sleep(0.2)
