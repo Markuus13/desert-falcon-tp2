@@ -8,6 +8,11 @@ require_relative 'Sprite'
 class GameWindow < Gosu::Window
 
   private
+  
+  attr_accessor :fps, :background_image_path, :falcon_image_path, :hiero_image_path, :title
+
+  # @background_image_path = "assets/images/grass_background.png"
+  @title = "Desert Falcon"
 
   def button_down(id)
     puts "KEY_ID = #{id}"
@@ -21,18 +26,18 @@ class GameWindow < Gosu::Window
 
   public
 
-  attr_accessor :fps
-
   def initialize(width, height)
     super width, height
-    self.caption = "Desert Falcon v0.0.0"
+    self.caption = @title
+    Random.new_seed
 
     # TODO: load images with Sprite
-    @background_image = Sprite.new("assets/images/grass_background.png")
-
+    @background_image = Sprite.new("assets/images/sand_background.jpg")
     @font = Gosu::Font.new(20)
 
     @falcon = Falcon.new(width/4.0, 3*height/4.0, 0)
+
+    @hiero = Array.new
   end
 
   def quit
@@ -65,10 +70,17 @@ class GameWindow < Gosu::Window
     @falcon.move_down  if (Gosu.button_down? Gosu::KbDown)  &&
                           z_next_down  < self.height
 
+    # Create Hiero
+    if @hiero.length < 3
+      @hiero.push(Hiero.new(width, 0, 0)) if (rand 1000) < 2
+    end
+    
 
     # Move Hiero
+    @hiero.each { |h| h.update }
 
     # Detect collision
+    @hiero.each { |h| @hiero.delete(h) if h.box.x <= 0}
     # if @falcon.overlapsWith(@hiero)
     #   TODO: Do something
     # end
@@ -80,9 +92,10 @@ class GameWindow < Gosu::Window
 
   def draw
     #puts fps
+    @background_image.render(0, 0, 0)
     @font.draw("FPS: #{fps}", (self.width - 80), (self.height - 40), 0xff_ff0000)
     @falcon.draw
-    @background_image.render(0, 0, 0)
+    @hiero.each { |h| h.draw }
   end
 
 end

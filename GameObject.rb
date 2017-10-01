@@ -8,9 +8,8 @@ class GameObject
   public
 
   def initialize(x_pos, y_pos, z_pos)
-    @x = x_pos
-    @y = y_pos
-    @z = z_pos
+    # @image = Sprite.new(file_name)
+    # @box = Box.new(x_pos, y_pos, @image.width, @image.height)
   end
 
   def destroy

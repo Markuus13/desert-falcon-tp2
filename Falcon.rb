@@ -9,8 +9,6 @@ class Falcon < GameObject
 
   def initialize(x_pos, y_pos, z_pos)
     @image = Sprite.new("assets/images/falcon.png")
-    puts "image.width = #{@image.width}"
-    puts "image.height = #{@image.height}"
     @box = Box.new(x_pos, y_pos, @image.width, @image.height)
     @z = z_pos
 
@@ -22,26 +20,26 @@ class Falcon < GameObject
   def update; end
 
   def draw
-    @image.render(@box.x, @box.y, 1)
+    @image.render(@box.x, @box.y, 2)
   end
 
   def notifyCollision(object)
   end
 
   def move_left
-    puts "Falcon moved left"
+    # puts "Falcon moved left"
     @box.x -= @x_vel
     @box.y -= @y_vel
   end
 
   def move_right
-    puts "Falcon moved right"
+    # puts "Falcon moved right"
     @box.x += @x_vel
     @box.y += @y_vel
   end
 
   def move_up
-    puts "Falcon moved up"
+    # puts "Falcon moved up"
     if @z < 1
       @z += 1
       @box.y -= @z_vel
@@ -51,7 +49,7 @@ class Falcon < GameObject
   end
 
   def move_down
-    puts "Falcon moved down"
+    # puts "Falcon moved down"
     if @z > -1
       @z -= 1
       @box.y += @z_vel
