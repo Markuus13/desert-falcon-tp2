@@ -1,5 +1,3 @@
-require 'gosu'
-
 require_relative 'Sprite'
 require_relative 'Box'
 
@@ -7,9 +5,9 @@ require_relative 'Box'
 class GameObject
   public
 
-  def initialize(x_pos, y_pos, z_pos)
-    # @image = Sprite.new(file_name)
-    # @box = Box.new(x_pos, y_pos, @image.width, @image.height)
+  def initialize(x_pos, y_pos, z_pos, file_name)
+    @image = Sprite.new(file_name)
+    @box = Box.new(x_pos, y_pos, @image.width, @image.height)
   end
 
   def destroy
@@ -28,6 +26,7 @@ class GameObject
   end
 
   def notifyCollision(object)
+    return self.overlapsWith(object)
   end
 
 end

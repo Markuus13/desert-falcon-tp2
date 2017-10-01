@@ -11,7 +11,7 @@ class GameWindow < Gosu::Window
   
   attr_accessor :fps, :background_image_path, :falcon_image_path, :hiero_image_path, :title
 
-  # @background_image_path = "assets/images/grass_background.png"
+  # @background_image_path = "assets/images/sand_background.jpg"
   @title = "Desert Falcon"
 
   def button_down(id)
@@ -71,8 +71,13 @@ class GameWindow < Gosu::Window
                           z_next_down  < self.height
 
     # Create Hiero
+    x_next = self.width
+    y_next = self.height/3
+    z_next = (rand 3) - 1
+    hiero_spawn_chance = (rand 1000) < 5
+
     if @hiero.length < 3
-      @hiero.push(Hiero.new(width, 0, 0)) if (rand 1000) < 2
+      @hiero.push(Hiero.new(x_next, y_next, z_next)) if hiero_spawn_chance
     end
     
 
@@ -80,10 +85,15 @@ class GameWindow < Gosu::Window
     @hiero.each { |h| h.update }
 
     # Detect collision
-    @hiero.each { |h| @hiero.delete(h) if h.box.x <= 0}
-    # if @falcon.overlapsWith(@hiero)
-    #   TODO: Do something
-    # end
+    ## Delete hiero if it colides with border
+    @hiero.delete_if { |h| h.box.x <= 0 || h.box.y >= self.height }
+    
+    # @hiero.each { |h|
+    #   if h.notifyCollision(@falcon) || @falcon.notifyCollision(h)
+    #     # TODO: do something
+    #     puts "Collision"
+    #   end
+    # }
 
     # TODO: remaining updates
     @fps = Gosu::fps.to_s

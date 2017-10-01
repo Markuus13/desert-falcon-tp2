@@ -27,19 +27,16 @@ class Falcon < GameObject
   end
 
   def move_left
-    # puts "Falcon moved left"
     @box.x -= @x_vel
     @box.y -= @y_vel
   end
 
   def move_right
-    # puts "Falcon moved right"
     @box.x += @x_vel
     @box.y += @y_vel
   end
 
   def move_up
-    # puts "Falcon moved up"
     if @z < 1
       @z += 1
       @box.y -= @z_vel
@@ -49,7 +46,6 @@ class Falcon < GameObject
   end
 
   def move_down
-    # puts "Falcon moved down"
     if @z > -1
       @z -= 1
       @box.y += @z_vel
