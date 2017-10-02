@@ -9,7 +9,7 @@ class GameWindow < Gosu::Window
 
   private
   
-  attr_accessor :fps, :background_image_path, :falcon_image_path, :hiero_image_path, :title
+  attr_accessor :background_image_path, :falcon_image_path, :hiero_image_path, :title
 
   # @background_image_path = "assets/images/sand_background.jpg"
   @title = "Desert Falcon"
@@ -38,6 +38,8 @@ class GameWindow < Gosu::Window
     @falcon = Falcon.new(width/4.0, 3*height/4.0, 0)
 
     @hiero = Array.new
+
+    @score = 0
   end
 
   def quit
@@ -88,12 +90,12 @@ class GameWindow < Gosu::Window
     ## Delete hiero if it colides with border
     @hiero.delete_if { |h| h.box.x <= 0 || h.box.y >= self.height }
     
-    # @hiero.each { |h|
-    #   if h.notifyCollision(@falcon) || @falcon.notifyCollision(h)
-    #     # TODO: do something
-    #     puts "Collision"
-    #   end
-    # }
+    ## Delete hiero it it colides with falcon
+    @hiero.delete_if { |h|
+      h.notifyCollision(@falcon.box) &&
+      @falcon.notifyCollision(h.box) &&
+      @score += 10
+    }
 
     # TODO: remaining updates
     @fps = Gosu::fps.to_s
@@ -103,7 +105,8 @@ class GameWindow < Gosu::Window
   def draw
     #puts fps
     @background_image.render(0, 0, 0)
-    @font.draw("FPS: #{fps}", (self.width - 80), (self.height - 40), 0xff_ff0000)
+    @font.draw("SCORE: #{@score}", 10, 10, 5, 1, 1, 0xff_00ff00)
+    @font.draw("FPS: #{@fps}", (self.width - 80), (self.height - 20), 5, 1, 1, 0xff_00ff00)
     @falcon.draw
     @hiero.each { |h| h.draw }
   end

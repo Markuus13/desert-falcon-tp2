@@ -25,6 +25,7 @@ class Hiero < GameObject
   end
 
   def notifyCollision(object)
+    return self.box.overlapsWith(object)
   end
 
 end
