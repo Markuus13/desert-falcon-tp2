@@ -1,9 +1,4 @@
-require_relative 'GameObject'
-
-
 class Hiero < GameObject
-  public
-
   attr_accessor :x, :y, :z, :x_vel, :y_vel, :box
 
   def initialize(x_pos, y_pos, z_pos)
@@ -24,8 +19,7 @@ class Hiero < GameObject
     @image.render(@box.x, @box.y, 1)
   end
 
-  def notifyCollision(object)
+  def notify_collision(object)
     return self.box.overlapsWith(object)
   end
-
 end

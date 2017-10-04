@@ -1,18 +1,9 @@
 require 'gosu'
 
-require_relative 'Falcon'
-require_relative 'Hiero'
-require_relative 'Sprite'
-
-
 class GameWindow < Gosu::Window
-
   private
-  
-  attr_accessor :background_image_path, :falcon_image_path, :hiero_image_path, :title
 
-  # @background_image_path = "assets/images/sand_background.jpg"
-  @title = "Desert Falcon"
+  attr_accessor :background_image_path, :falcon_image_path, :hiero_image_path, :title
 
   def button_down(id)
     puts "KEY_ID = #{id}"
@@ -23,22 +14,18 @@ class GameWindow < Gosu::Window
     end
   end
 
-
   public
 
   def initialize(width, height)
     super width, height
-    self.caption = @title
+    self.caption = "Desert Falcon"
     Random.new_seed
 
     # TODO: load images with Sprite
     @background_image = Sprite.new("assets/images/sand_background.jpg")
     @font = Gosu::Font.new(20)
-
     @falcon = Falcon.new(width/4.0, 3*height/4.0, 0)
-
     @hiero = Array.new
-
     @score = 0
   end
 
@@ -48,7 +35,6 @@ class GameWindow < Gosu::Window
 
   # Game logic
   def update
-    
     # Get user inputs
     # Move Falcon
     f_box = @falcon.box
@@ -81,7 +67,6 @@ class GameWindow < Gosu::Window
     if @hiero.length < 3
       @hiero.push(Hiero.new(x_next, y_next, z_next)) if hiero_spawn_chance
     end
-    
 
     # Move Hiero
     @hiero.each { |h| h.update }
@@ -89,17 +74,17 @@ class GameWindow < Gosu::Window
     # Detect collision
     ## Delete hiero if it colides with border
     @hiero.delete_if { |h| h.box.x <= 0 || h.box.y >= self.height }
-    
+
     ## Delete hiero it it colides with falcon
     @hiero.delete_if { |h|
-      h.notifyCollision(@falcon.box) &&
-      @falcon.notifyCollision(h.box) &&
+      h.notify_collision(@falcon.box) &&
+      @falcon.notify_collision(h.box) &&
       @score += 10
     }
 
     # TODO: remaining updates
     @fps = Gosu::fps.to_s
-        
+
   end
 
   def draw
@@ -110,5 +95,4 @@ class GameWindow < Gosu::Window
     @falcon.draw
     @hiero.each { |h| h.draw }
   end
-
 end

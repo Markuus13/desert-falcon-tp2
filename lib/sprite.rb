@@ -1,9 +1,6 @@
 require 'gosu'
 
-
 class Sprite < Gosu::Image
-  public
-
   def initialize(file_name)
     @image = Gosu::Image.new(file_name)
   end
@@ -22,5 +19,4 @@ class Sprite < Gosu::Image
   def height
     return @image.height
   end
-
 end

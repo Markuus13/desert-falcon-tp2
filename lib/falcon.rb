@@ -1,10 +1,6 @@
-require_relative 'GameObject'
-
+require 'game_object'
 
 class Falcon < GameObject
-
-  public
-
   attr_accessor :x, :y, :z, :x_vel, :y_vel, :z_vel, :box
 
   def initialize(x_pos, y_pos, z_pos)
@@ -17,13 +13,11 @@ class Falcon < GameObject
     @z_vel = 40
   end
 
-  def update; end
-
   def draw
     @image.render(@box.x, @box.y, 2)
   end
 
-  def notifyCollision(object)
+  def notify_collision(object)
     return self.box.overlapsWith(object)
   end
 
@@ -54,5 +48,4 @@ class Falcon < GameObject
       sleep(0.2)
     end
   end
-
 end
