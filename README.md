@@ -5,6 +5,12 @@ A simplified version of atari game Desert Falcon in ruby.
 - Ruby (2.4.1)
 - Gosu dependencies
 
+# Developers
+- Marcus Vinícius 130032891
+- João Pedro Sousa 150038381
+- Leonardo de Almeida 150135491
+- Bruno Helder Rodrigues Guedes 150120338
+
 # Getting started on project
 1. Clone the repository `git clone https://github.com/Markuus13/desert-falcon-tp2`.
 
