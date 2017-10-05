@@ -1,6 +1,15 @@
 require 'box'
 
 RSpec.describe Box do
+  describe "#initialize" do
+    let (:expected_instance_variables) { [:@x, :@y, :@height, :@width] }
+    let (:box) { Box.new(10, 10, 5, 5) }
+
+    it "has the right initial attributes" do
+      expect(box.instance_variables).to match_array(expected_instance_variables)
+    end
+  end
+
   describe "#overlaps_with?" do
     context "when one box overlaps another" do
       it "returns true" do
