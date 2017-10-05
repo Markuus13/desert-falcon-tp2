@@ -20,6 +20,6 @@ class GameObject
   end
 
   def notify_collision(object)
-    return self.overlapsWith(object)
+    return self.overlaps_with?(object)
   end
 end

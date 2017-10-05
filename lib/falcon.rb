@@ -18,7 +18,7 @@ class Falcon < GameObject
   end
 
   def notify_collision(object)
-    return self.box.overlapsWith(object)
+    return self.box.overlaps_with?(object)
   end
 
   def move_left
