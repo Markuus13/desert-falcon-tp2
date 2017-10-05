@@ -8,6 +8,9 @@ class Box
     @height = height
   end
 
+  def destroy
+  end
+
   def overlaps_with?(another_object)
     return (self.x < another_object.x + another_object.width &&
             self.x + self.width > another_object.x &&
