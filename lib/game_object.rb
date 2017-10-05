@@ -1,3 +1,6 @@
+require 'sprite'
+require 'box'
+
 class GameObject
   def initialize(x_pos, y_pos, z_pos, file_name)
     @image = Sprite.new(file_name)
@@ -19,7 +22,7 @@ class GameObject
   def isDead(object)
   end
 
-  def notify_collision(object)
-    return self.overlaps_with?(object)
+  def notify_collision(another_box)
+    return @box.overlaps_with?(another_box)
   end
 end
