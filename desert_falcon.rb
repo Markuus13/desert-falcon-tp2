@@ -1,3 +1,5 @@
+require 'bundler'
+
 module DesertFalcon
   def self.start_game
     window = GameWindow.new(640, 480)
@@ -5,7 +7,11 @@ module DesertFalcon
   end
 
   def self.initial_config
-    %w(lib assets).each do |folder_name|
+    # Requires all gems in Gemfile #
+    Bundler.require(:default)
+
+    # Put files in $LOAD_PATH global variable #
+    %w(lib assets spec).each do |folder_name|
       path = File.expand_path("../#{folder_name}", __FILE__)
       $LOAD_PATH.unshift(path) unless $LOAD_PATH.include?(path)
     end
