@@ -3,8 +3,6 @@ require 'gosu'
 class GameWindow < Gosu::Window
   private
 
-  attr_accessor :background_image_path, :falcon_image_path, :hiero_image_path, :title
-
   def button_down(id)
     puts "KEY_ID = #{id}"
     if id == Gosu::KbEscape
