@@ -18,7 +18,7 @@ class Falcon < GameObject
   end
 
   def notify_collision(object)
-    return self.box.overlaps_with?(object)
+    @box.overlaps_with?(object)
   end
 
   def move_left
@@ -35,7 +35,6 @@ class Falcon < GameObject
     if @z < 1
       @z += 1
       @box.y -= @z_vel
-      ## ISSO AQUI É GAMBIARRA!!! TEM QUE ARRUMAR DEPOIS
       sleep(0.2)
     end
   end
@@ -44,7 +43,6 @@ class Falcon < GameObject
     if @z > -1
       @z -= 1
       @box.y += @z_vel
-      ## ISSO AQUI É GAMBIARRA!!! TEM QUE ARRUMAR DEPOIS
       sleep(0.2)
     end
   end

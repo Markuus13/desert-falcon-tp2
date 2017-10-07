@@ -16,10 +16,10 @@ class GameObject
   def render
   end
 
-  def isEqual
+  def equal?(another_game_object)
   end
 
-  def isDead(object)
+  def dead?
   end
 
   def notify_collision(another_box)

@@ -1,18 +1,6 @@
 require 'gosu'
 
 class GameWindow < Gosu::Window
-  private
-
-  def button_down(id)
-    puts "KEY_ID = #{id}"
-    if id == Gosu::KbEscape
-      self.quit
-    else
-      super
-    end
-  end
-
-  public
 
   def initialize(width, height)
     super width, height
@@ -22,7 +10,7 @@ class GameWindow < Gosu::Window
     # TODO: load images with Sprite
     @background_image = Sprite.new("assets/images/sand_background.jpg")
     @font = Gosu::Font.new(20)
-    @falcon = Falcon.new(width/4.0, 3*height/4.0, 0)
+    @falcon = Falcon.new(width/4.0, 3 * height/4.0, 0)
     @hiero = Array.new
     @score = 0
   end
@@ -86,11 +74,20 @@ class GameWindow < Gosu::Window
   end
 
   def draw
-    #puts fps
     @background_image.render(0, 0, 0)
     @font.draw("SCORE: #{@score}", 10, 10, 5, 1, 1, 0xff_00ff00)
     @font.draw("FPS: #{@fps}", (self.width - 80), (self.height - 20), 5, 1, 1, 0xff_00ff00)
     @falcon.draw
     @hiero.each { |h| h.draw }
+  end
+
+  private
+
+  def button_down(id)
+    if id == Gosu::KbEscape
+      self.quit
+    else
+      super
+    end
   end
 end
