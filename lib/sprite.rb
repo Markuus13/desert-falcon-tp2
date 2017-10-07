@@ -13,10 +13,10 @@ class Sprite < Gosu::Image
   end
 
   def width
-    return @image.width
+    @image.width
   end
 
   def height
-    return @image.height
+    @image.height
   end
 end
