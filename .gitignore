@@ -52,3 +52,8 @@ build-iPhoneSimulator/
 # Mac OSX users
 .DS_Store
 
+# Byebug
+.byebug_history
+
+# Rspec
+.rspec_status
