@@ -87,10 +87,6 @@ class GameWindow < Gosu::Window
     @obstacle.delete_if { |o| o.box.x <= 0 || o.box.y >= self.height }
 
     ## Game over if falcon collides with obstacle
-    @obstacle.delete_if { |o|
-      o.notify_collision(@falcon.box) &&
-      @falcon.notify_collision(o.box) &&
-    }
 
     # TODO: remaining updates
     @fps = Gosu::fps.to_s
