@@ -2,6 +2,11 @@ require 'gosu'
 
 class GameWindow < Gosu::Window
 
+  MENU = 0
+  GAME = 1
+  SCOREBOARD = 2
+  SCORE = 3
+
   def initialize(width, height)
     super width, height
     self.caption = "Desert Falcon"
@@ -14,14 +19,52 @@ class GameWindow < Gosu::Window
     @hiero = Array.new
     @obstacle = Array.new
     @score = 0
+    @state = MENU
+    @font = Gosu::Font.new(self, Gosu::default_font_name, 20)
   end
 
   def quit
     close
   end
 
-  # Game logic
   def update
+    case @state
+    when MENU
+      def draw
+        @font.draw("1 - Play", 0, 0, 1, 1.0, 1.0, Gosu::Color::WHITE)
+        @font.draw("2 - Scoreboard", 0, 30, 1.0, 1.0, 1.0, Gosu::Color::WHITE)
+        @font.draw("ESC - Quit", 0, 60, 1.0, 1.0, 1.0, Gosu::Color::WHITE)
+      end
+      @state = GAME if Gosu.button_down? Gosu::KB_1
+      @state = SCOREBOARD if Gosu.button_down? Gosu::KB_2
+    when GAME
+      def draw
+        @background_image.render(0, 0, 0)
+        @font.draw("SCORE: #{@score}", 10, 10, 5, 1, 1, 0xff_00ff00)
+        @font.draw("FPS: #{@fps}", (self.width - 80), (self.height - 20), 5, 1, 1, 0xff_00ff00)
+        @falcon.draw
+        @hiero.each { |h| h.draw }
+        @obstacle.each { |o| o.draw }
+      end
+      # check if the game is over and then set @state = SCORE
+      game_logic
+    when SCOREBOARD
+      def draw
+        @font.draw("Desert Falcon Scoreboard", 200, 0, 1, 1.0, 1.0, Gosu::Color::WHITE)
+        @font.draw("0 - Main Menu", 0, 30, 1, 1.0, 1.0, Gosu::Color::WHITE)
+      end
+      @state = MENU if Gosu.button_down? Gosu::KB_0
+    when SCORE
+      def draw
+        @font.draw("Desert Falcon Scoreboard", 200, 0, 1, 1.0, 1.0, Gosu::Color::WHITE)
+        @font.draw("0 - Main Menu", 0, 30, 1, 1.0, 1.0, Gosu::Color::WHITE)
+      end
+      @state = MENU if Gosu.button_down? Gosu::KB_0
+    end
+  end
+
+  # Game logic
+  def game_logic
     # Get user inputs
     # Move Falcon
     f_box = @falcon.box
@@ -91,15 +134,6 @@ class GameWindow < Gosu::Window
     # TODO: remaining updates
     @fps = Gosu::fps.to_s
 
-  end
-
-  def draw
-    @background_image.render(0, 0, 0)
-    @font.draw("SCORE: #{@score}", 10, 10, 5, 1, 1, 0xff_00ff00)
-    @font.draw("FPS: #{@fps}", (self.width - 80), (self.height - 20), 5, 1, 1, 0xff_00ff00)
-    @falcon.draw
-    @hiero.each { |h| h.draw }
-    @obstacle.each { |o| o.draw }
   end
 
   private
