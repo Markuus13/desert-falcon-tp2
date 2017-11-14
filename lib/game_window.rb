@@ -22,6 +22,7 @@ class GameWindow < Gosu::Window
     @score = 0
     @state = MENU
     @font = Gosu::Font.new(self, Gosu::default_font_name, 20)
+    @draw_array = [method(:draw_menu), method(:draw_game), method(:draw_scoreboard), method(:draw_score), method(:draw_game_over)]
   end
 
   def quit
@@ -32,39 +33,28 @@ class GameWindow < Gosu::Window
     case @state
     when MENU
       def draw
-        @font.draw("1 - Play", 0, 0, 1, 1.0, 1.0, Gosu::Color::WHITE)
-        @font.draw("2 - Scoreboard", 0, 30, 1.0, 1.0, 1.0, Gosu::Color::WHITE)
-        @font.draw("ESC - Quit", 0, 60, 1.0, 1.0, 1.0, Gosu::Color::WHITE)
+        @draw_array[MENU].call
       end
       @state = GAME if Gosu.button_down? Gosu::KB_1
       @state = SCOREBOARD if Gosu.button_down? Gosu::KB_2
     when GAME
       def draw
-        @background_image.render(0, 0, 0)
-        @font.draw("SCORE: #{@score}", 10, 10, 5, 1, 1, 0xff_00ff00)
-        @font.draw("FPS: #{@fps}", (self.width - 80), (self.height - 20), 5, 1, 1, 0xff_00ff00)
-        @falcon.draw
-        @hiero.each { |h| h.draw }
-        @obstacle.each { |o| o.draw }
+        @draw_array[GAME].call
       end
-      # check if the game is over and then set @state = SCORE
       game_logic
     when SCOREBOARD
       def draw
-        @font.draw("Desert Falcon Scoreboard", 200, 0, 1, 1.0, 1.0, Gosu::Color::WHITE)
-        @font.draw("0 - Main Menu", 0, 30, 1, 1.0, 1.0, Gosu::Color::WHITE)
+        @draw_array[SCOREBOARD].call
       end
       @state = MENU if Gosu.button_down? Gosu::KB_0
     when SCORE
       def draw
-        @font.draw("Desert Falcon Scoreboard", 200, 0, 1, 1.0, 1.0, Gosu::Color::WHITE)
-        @font.draw("0 - Main Menu", 0, 30, 1, 1.0, 1.0, Gosu::Color::WHITE)
+        @draw_array[SCORE].call
       end
-      @state = MENU if Gosu.button_down? Gosu::KB_0
+        @state = MENU if Gosu.button_down? Gosu::KB_0
     when GAME_OVER
       def draw
-        @font.draw("Game Over", 280, 240, 1, 1.0, 1.0, Gosu::Color::WHITE)
-        @font.draw("0 - Main Menu", 0, 0, 1, 1.0, 1.0, Gosu::Color::WHITE)
+        @draw_array[GAME_OVER].call
       end
       @state = MENU if Gosu.button_down? Gosu::KB_0
     end
@@ -143,7 +133,6 @@ class GameWindow < Gosu::Window
       end
     end
 
-
     # TODO: remaining updates
     @fps = Gosu::fps.to_s
 
@@ -164,6 +153,36 @@ class GameWindow < Gosu::Window
     @score = 0
     @hiero = []
     @obstacle = []
+  end
+
+  def draw_menu
+    @font.draw("1 - Play", 0, 0, 1, 1.0, 1.0, Gosu::Color::WHITE)
+    @font.draw("2 - Scoreboard", 0, 30, 1.0, 1.0, 1.0, Gosu::Color::WHITE)
+    @font.draw("ESC - Quit", 0, 60, 1.0, 1.0, 1.0, Gosu::Color::WHITE)
+  end
+
+  def draw_game
+    @background_image.render(0, 0, 0)
+    @font.draw("SCORE: #{@score}", 10, 10, 5, 1, 1, 0xff_00ff00)
+    @font.draw("FPS: #{@fps}", (self.width - 80), (self.height - 20), 5, 1, 1, 0xff_00ff00)
+    @falcon.draw
+    @hiero.each { |h| h.draw }
+    @obstacle.each { |o| o.draw }
+  end
+
+  def draw_scoreboard
+    @font.draw("Desert Falcon Scoreboard", 200, 0, 1, 1.0, 1.0, Gosu::Color::WHITE)
+    @font.draw("0 - Main Menu", 0, 30, 1, 1.0, 1.0, Gosu::Color::WHITE)
+  end
+
+  def draw_game_over
+    @font.draw("Game Over", 280, 240, 1, 1.0, 1.0, Gosu::Color::WHITE)
+    @font.draw("0 - Main Menu", 0, 0, 1, 1.0, 1.0, Gosu::Color::WHITE)
+  end
+
+  def draw_score
+    @font.draw("Desert Falcon Scoreboard", 200, 0, 1, 1.0, 1.0, Gosu::Color::WHITE)
+    @font.draw("0 - Main Menu", 0, 30, 1, 1.0, 1.0, Gosu::Color::WHITE)
   end
 
 end
