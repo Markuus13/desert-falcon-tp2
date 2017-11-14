@@ -6,6 +6,7 @@ class GameWindow < Gosu::Window
   GAME = 1
   SCOREBOARD = 2
   SCORE = 3
+  GAME_OVER = 4
 
   def initialize(width, height)
     super width, height
@@ -58,6 +59,12 @@ class GameWindow < Gosu::Window
       def draw
         @font.draw("Desert Falcon Scoreboard", 200, 0, 1, 1.0, 1.0, Gosu::Color::WHITE)
         @font.draw("0 - Main Menu", 0, 30, 1, 1.0, 1.0, Gosu::Color::WHITE)
+      end
+      @state = MENU if Gosu.button_down? Gosu::KB_0
+    when GAME_OVER
+      def draw
+        @font.draw("Game Over", 280, 240, 1, 1.0, 1.0, Gosu::Color::WHITE)
+        @font.draw("0 - Main Menu", 0, 0, 1, 1.0, 1.0, Gosu::Color::WHITE)
       end
       @state = MENU if Gosu.button_down? Gosu::KB_0
     end
@@ -130,6 +137,13 @@ class GameWindow < Gosu::Window
     @obstacle.delete_if { |o| o.box.x <= 0 || o.box.y >= self.height }
 
     ## Game over if falcon collides with obstacle
+    @obstacle.each do |o|
+      if (o.notify_collision(@falcon.box) && @falcon.notify_collision(o.box))
+        @state = GAME_OVER
+        self.update
+      end
+    end
+
 
     # TODO: remaining updates
     @fps = Gosu::fps.to_s
