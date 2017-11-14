@@ -139,8 +139,7 @@ class GameWindow < Gosu::Window
     ## Game over if falcon collides with obstacle
     @obstacle.each do |o|
       if (o.notify_collision(@falcon.box) && @falcon.notify_collision(o.box))
-        @state = GAME_OVER
-        self.update
+        end_game
       end
     end
 
@@ -159,4 +158,12 @@ class GameWindow < Gosu::Window
       super
     end
   end
+
+  def end_game
+    @state = GAME_OVER
+    @score = 0
+    @hiero = []
+    @obstacle = []
+  end
+
 end
