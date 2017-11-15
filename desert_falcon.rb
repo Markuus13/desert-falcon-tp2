@@ -2,6 +2,8 @@ require 'bundler'
 
 module DesertFalcon
   def self.start_game
+    self.initial_config
+
     window = GameWindow.new(640, 480)
     window.show
   end
@@ -19,5 +21,4 @@ module DesertFalcon
   end
 end
 
-DesertFalcon::initial_config
 DesertFalcon::start_game
