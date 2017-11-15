@@ -26,5 +26,8 @@ Everything should be working fine. :)
 # How to run tests
 On project root run `bundle exec rspec`.
 
+# How to run static code analyzer
+On project root run `bundle exec rubocop`.
+
 # How to play the Game
 On project root run `ruby desert_falcon`.
