@@ -19,6 +19,7 @@ class GameWindow < Gosu::Window
     @falcon = Falcon.new(width/4.0, 3 * height/4.0, 0)
     @hiero = Array.new
     @obstacle = Array.new
+    @enemy = Array.new
     @score = 0
     @state = MENU
     @font = Gosu::Font.new(self, Gosu::default_font_name, 20)
@@ -86,10 +87,10 @@ class GameWindow < Gosu::Window
                           z_next_down  < self.height
 
     # Create Hiero
-    x_next = self.width
-    y_next = self.height / 3
-    z_next = (rand 3) - 1
     hiero_spawn_chance = (rand 1000) < 5
+    x_next = self.width
+    y_next = (rand 200)
+    z_next = (rand 3) - 1
 
     if @hiero.length < 3
       @hiero.push(Hiero.new(x_next, y_next, z_next)) if hiero_spawn_chance
@@ -109,11 +110,34 @@ class GameWindow < Gosu::Window
       @score += 10
     }
 
+    # Create Enemy
+    enemy_spawn_chance = (rand 1500) < 5
+    x_next = self.width
+    y_next = (rand 200)
+    z_next = (rand 3) - 1
+
+    if @enemy.length < 3
+      @enemy.push(Enemy.new(x_next, y_next, z_next)) if enemy_spawn_chance
+    end
+
+    # Move Enemy
+    @enemy.each { |e| e.update }
+
+    ## Detect collision
+    ## Deletes enemy if it collides with border
+    @enemy.delete_if { |e| e.box.x <= 0 || e.box.y >= self.height }
+
+    ## Game over if falcon collides with enemy
+    @enemy.each do |e|
+      end_game if e.notify_collision(@falcon.box) && @falcon.notify_collision(e.box)
+    end
+
+
     # Create Obstacle
     obstacle_spawn_chance = (rand 500) < 5
     x_next = self.width
     y_next = (rand 200)
-    z_next = 0
+    z_next = -1
 
     if @obstacle.length < 3
       @obstacle.push(Obstacle.new(x_next, y_next, z_next)) if obstacle_spawn_chance
@@ -167,6 +191,7 @@ class GameWindow < Gosu::Window
     @font.draw("FPS: #{@fps}", (self.width - 80), (self.height - 20), 5, 1, 1, 0xff_00ff00)
     @falcon.draw
     @hiero.each { |h| h.draw }
+    @enemy.each { |e| e.draw }
     @obstacle.each { |o| o.draw }
   end
 
