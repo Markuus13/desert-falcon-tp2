@@ -1,4 +1,4 @@
-require 'bundler'
+require "bundler"
 
 module DesertFalcon
   def self.start_game
@@ -17,7 +17,7 @@ module DesertFalcon
       path = File.expand_path("../#{folder_name}", __FILE__)
       $LOAD_PATH.unshift(path) unless $LOAD_PATH.include?(path)
     end
-    Dir['./lib/*.rb'].each { |file| require file }
+    Dir["./lib/*.rb"].each { |file| require file }
   end
 end
 

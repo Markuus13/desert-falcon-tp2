@@ -1,4 +1,4 @@
-require 'gosu'
+require "gosu"
 
 class Sprite < Gosu::Image
   def initialize(file_name)

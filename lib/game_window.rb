@@ -1,4 +1,4 @@
-require 'gosu'
+require "gosu"
 
 class GameWindow < Gosu::Window
   MENU = 0
@@ -8,10 +8,10 @@ class GameWindow < Gosu::Window
 
   def initialize(width, height)
     super width, height
-    self.caption = 'Desert Falcon'
+    self.caption = "Desert Falcon"
     Random.new_seed
 
-    @background_image = Sprite.new('assets/images/sand_background.jpg')
+    @background_image = Sprite.new("assets/images/sand_background.jpg")
     @font = Gosu::Font.new(20)
     @falcon = Falcon.new(width / 4.0, 3 * height / 4.0, 0)
     @hiero = []
@@ -71,17 +71,17 @@ class GameWindow < Gosu::Window
     z_next_down  = f_box.y + f_box.height + @falcon.z_vel
 
     @falcon.move_left  if (Gosu.button_down? Gosu::KbLeft)  &&
-                          x_next_left  > 0                  &&
-                          y_next_left  > 0
+        x_next_left  > 0 &&
+        y_next_left  > 0
 
     @falcon.move_right if (Gosu.button_down? Gosu::KbRight) &&
-                          x_next_right < width &&
-                          y_next_right < height
+        x_next_right < width &&
+        y_next_right < height
 
     @falcon.move_up    if (Gosu.button_down? Gosu::KbUp)    &&
-                          z_next_up > 0
+        z_next_up > 0
     @falcon.move_down  if (Gosu.button_down? Gosu::KbDown)  &&
-                          z_next_down < height
+        z_next_down < height
 
     # Create Hiero
     hiero_spawn_chance = (rand 1000) < 5
@@ -175,9 +175,9 @@ class GameWindow < Gosu::Window
   end
 
   def draw_menu
-    @font.draw('1 - Play', 0, 0, 1, 1.0, 1.0)
-    @font.draw('2 - Scoreboard', 0, 30, 1.0, 1.0, 1.0)
-    @font.draw('ESC - Quit', 0, 60, 1.0, 1.0, 1.0)
+    @font.draw("1 - Play", 0, 0, 1, 1.0, 1.0)
+    @font.draw("2 - Scoreboard", 0, 30, 1.0, 1.0, 1.0)
+    @font.draw("ESC - Quit", 0, 60, 1.0, 1.0, 1.0)
   end
 
   def draw_game
@@ -191,12 +191,12 @@ class GameWindow < Gosu::Window
   end
 
   def draw_scoreboard
-    @font.draw('Desert Falcon - Scoreboard', 200, 0, 1, 1.0, 1.0)
-    @font.draw('0 - Main Menu', 0, 30, 1, 1.0, 1.0)
+    @font.draw("Desert Falcon - Scoreboard", 200, 0, 1, 1.0, 1.0)
+    @font.draw("0 - Main Menu", 0, 30, 1, 1.0, 1.0)
   end
 
   def draw_score
-    @font.draw('Desert Falcon', 250, 10, 1, 1.0, 1.0)
+    @font.draw("Desert Falcon", 250, 10, 1, 1.0, 1.0)
     @font.draw("Your score was #{@score}!", 235, 150, 1, 1.0, 1.0)
     @font.draw("Write your name to save your score: #{self.text_input.text}", 160, 180, 1, 1.0, 1.0)
     @font.draw("Press '=' to save your score", 200, 400, 1, 1.0, 1.0)

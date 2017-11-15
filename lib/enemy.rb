@@ -1,10 +1,10 @@
-require 'game_object'
+require "game_object"
 
 class Enemy < GameObject
   attr_accessor :x, :y, :z, :x_vel, :y_vel, :box
 
   def initialize(x_pos, y_pos, z_pos)
-    @image = Sprite.new('assets/enemy/flying_enemy.png')
+    @image = Sprite.new("assets/enemy/flying_enemy.png")
     @box = Box.new(x_pos, y_pos, @image.width, @image.height)
 
     @x = x_pos

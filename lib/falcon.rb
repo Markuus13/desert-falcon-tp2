@@ -1,10 +1,10 @@
-require 'game_object'
+require "game_object"
 
 class Falcon < GameObject
   attr_accessor :x, :y, :z, :x_vel, :y_vel, :z_vel, :box
 
   def initialize(x_pos, y_pos, z_pos)
-    @image = Sprite.new('assets/images/falcon.png')
+    @image = Sprite.new("assets/images/falcon.png")
     @box = Box.new(x_pos, y_pos, @image.width, @image.height)
     @z = z_pos
 

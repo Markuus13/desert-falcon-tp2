@@ -2,7 +2,7 @@ class Hiero < GameObject
   attr_accessor :x, :y, :z, :x_vel, :y_vel, :box
 
   def initialize(x_pos, y_pos, z_pos)
-    @image = Sprite.new('assets/images/hiero.png')
+    @image = Sprite.new("assets/images/hiero.png")
     @box = Box.new(x_pos, y_pos, @image.width, @image.height)
 
     @z_pos = z_pos

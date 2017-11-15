@@ -1,5 +1,5 @@
-require 'sprite'
-require 'box'
+require "sprite"
+require "box"
 
 class GameObject
   def initialize(x_pos, y_pos, _z_pos, file_name)

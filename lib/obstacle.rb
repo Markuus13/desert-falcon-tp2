@@ -2,7 +2,7 @@ class Obstacle < GameObject
   attr_accessor :x_pos, :y_pos, :z_pos, :x_vel, :y_vel, :box
 
   def initialize(x_pos, y_pos, z_pos)
-    @image = Sprite.new('assets/images/obstacle.png')
+    @image = Sprite.new("assets/images/obstacle.png")
     @box = Box.new(x_pos, y_pos, @image.width, @image.height)
 
     @x_vel = 2
