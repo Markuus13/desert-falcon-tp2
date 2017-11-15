@@ -18,7 +18,7 @@ class GameWindow < Gosu::Window
     @obstacle = Array.new
     @enemy = Array.new
     @score = 0
-    @state = SCORE
+    @state = MENU
     @font = Gosu::Font.new(self, Gosu::default_font_name, 20)
     @draw_array = [method(:draw_menu), method(:draw_game), method(:draw_score), method(:draw_scoreboard)]
   end
@@ -41,10 +41,7 @@ class GameWindow < Gosu::Window
     when SCORE
       self.text_input ||= TextInput.new
       def draw; @draw_array[SCORE].call; end
-      if text_input.finished?
-        persist_score
-        @state = SCOREBOARD
-      end
+      @state = SCOREBOARD if text_input.finished?
 
     when SCOREBOARD
       self.text_input = nil
