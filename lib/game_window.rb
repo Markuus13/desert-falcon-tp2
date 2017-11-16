@@ -126,7 +126,7 @@ class GameWindow < Gosu::Window
 
     ## Game over if falcon collides with enemy
     @enemy.each do |e|
-      end_game if e.notify_collision(@falcon.box) && @falcon.notify_collision(e.box)
+      @state = SCORE if e.notify_collision(@falcon.box) && @falcon.notify_collision(e.box)
     end
 
     # Create Obstacle
@@ -172,6 +172,7 @@ class GameWindow < Gosu::Window
     @score = 0
     @hiero = []
     @obstacle = []
+    @enemy = []
   end
 
   def draw_menu
