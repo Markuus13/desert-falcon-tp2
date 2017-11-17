@@ -27,11 +27,11 @@ class Ranking
 
   private
 
-  def order(scores)
-    @scores = @scores.map { |elem| elem.split(" - ") }
-                     .to_h
-                     .sort_by { |_key, value| value.to_i }
-                     .map { |elem| elem.join(" - ") }
-                     .reverse[0..9]
+  def order(_scores)
+    @scores = @scores.map { |elem| elem.split(" - ") }.
+      to_h.
+      sort_by { |_key, value| value.to_i }.
+      map { |elem| elem.join(" - ") }.
+      reverse[0..9]
   end
 end
