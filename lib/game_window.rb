@@ -68,6 +68,7 @@ class GameWindow < Gosu::Window
     @hieros = []
     @obstacles = []
     @enemies = []
+    @ranking = Ranking.new
   end
 
   def draw_menu
@@ -91,8 +92,9 @@ class GameWindow < Gosu::Window
     @font.draw("0 - Main Menu", 0, 30, 1, 1.0, 1.0)
     x = 10
     y = 30
+    i = 0
     @ranking.all_scores.each do |rank|
-      @font.draw(rank.chomp, x, y += 20, 1, 1.0, 1.0)
+      @font.draw("#{i += 1}. #{rank.chomp}", x, y += 20, 1, 1.0, 1.0)
     end
   end
 
@@ -111,7 +113,6 @@ class GameWindow < Gosu::Window
 
   def score
     if text_input.finished?
-      @ranking = Ranking.new
       @ranking.save(text_input.text, @score)
       @state = SCOREBOARD
     end

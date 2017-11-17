@@ -26,6 +26,6 @@ class Ranking
                      .to_h
                      .sort_by { |_key, value| value.to_i }
                      .map { |elem| elem.join(" - ") }
-                     .reverse
+                     .reverse[0..9]
   end
 end
