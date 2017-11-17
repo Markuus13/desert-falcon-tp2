@@ -1,5 +1,7 @@
+# Class Ranking create, sort and stores all ranking information,
+# such as the player name and highest score.
 class Ranking
-  RANKING_PATH = "ranking.txt".freeze
+  RANKING_PATH = "ranking.txt".freeze # Ranking file name
 
   # Initializes the Ranking object
   def initialize
@@ -8,7 +10,8 @@ class Ranking
   end
 
   # Write the username and score passed as argument into the ranking file.
-  # @param username, score [String, String]
+  # @param username [String]
+  # @param score [String]
   # @return [Boolean] true or false depending on file closing.
   def save(username, score)
     @file.puts "#{username} - #{score}"
@@ -27,6 +30,7 @@ class Ranking
 
   private
 
+  # Organizes scores
   def order(_scores)
     @scores = @scores.map { |elem| elem.split(" - ") }.
       to_h.

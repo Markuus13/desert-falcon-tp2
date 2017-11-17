@@ -1,3 +1,5 @@
+# Class TextInput is used to read the player's name input
+# after the game is over.
 class TextInput < Gosu::TextInput
   # Initialize TextInput object that inherits Gosu::TextInput
   def initialize

@@ -1,11 +1,18 @@
 require "gosu"
 
+# Class GameWindow is the main class of the game,
+# it creates the game window for the game to be played,
+# it handles the main game logic, draw all the elements
+# that are contained in it and exits when the game is over.
 class GameWindow < Gosu::Window
-  MENU = 0
-  GAME = 1
-  SCORE = 2
-  SCOREBOARD = 3
+  MENU = 0 # State of the game
+  GAME = 1 # State of the game
+  SCORE = 2 # State of the game
+  SCOREBOARD = 3 # State of the game
 
+  # Initialize GameWindow object
+  # @param width [Integer] Window's width in pixels
+  # @param height [Integer] Window's height in pixels
   def initialize(width, height)
     super width, height
     Random.new_seed
@@ -19,10 +26,12 @@ class GameWindow < Gosu::Window
     initial_state
   end
 
+  # Invokes draw method that changes depending on the current game status.
   def draw
     @draw_methods[@state].call
   end
 
+  # Updates the game status.
   def update
     case @state
     when MENU
@@ -36,6 +45,7 @@ class GameWindow < Gosu::Window
     end
   end
 
+  # Handles the main game logic.
   def game_logic
     falcon_input
     handle_hieros
@@ -46,14 +56,17 @@ class GameWindow < Gosu::Window
 
   private
 
+  # Display frames per second.
   def gosu_fps
     @fps = Gosu.fps.to_s
   end
 
+  # Ends game execution.
   def quit
     close
   end
 
+  # Checks wheter a button is pressed.
   def button_down(id)
     if id == Gosu::KbEscape
       quit
@@ -62,6 +75,7 @@ class GameWindow < Gosu::Window
     end
   end
 
+  # Defines game inital state.
   def initial_state
     @state = MENU
     @score = 0
@@ -71,12 +85,14 @@ class GameWindow < Gosu::Window
     @ranking = Ranking.new
   end
 
+  # Draws the main menu of the game.
   def draw_menu
     @font.draw("1 - Play", 0, 0, 1, 1.0, 1.0)
     @font.draw("2 - Scoreboard", 0, 30, 1.0, 1.0, 1.0)
     @font.draw("ESC - Quit", 0, 60, 1.0, 1.0, 1.0)
   end
 
+  # Draws all the game objects and miscellaneous things.
   def draw_game
     @background_image.render(0, 0, 0)
     @font.draw("SCORE: #{@score}", 10, 10, 5, 1, 1, 0xff_00ff00)
@@ -87,6 +103,7 @@ class GameWindow < Gosu::Window
     @obstacles.each(&:draw)
   end
 
+  # Draws the scoreboard.
   def draw_scoreboard
     @font.draw("Desert Falcon - Scoreboard", 200, 0, 1, 1.0, 1.0)
     @font.draw("0 - Main Menu", 0, 30, 1, 1.0, 1.0)
@@ -98,6 +115,7 @@ class GameWindow < Gosu::Window
     end
   end
 
+  # Draws score.
   def draw_score
     self.text_input ||= TextInput.new
     @font.draw("Desert Falcon", 250, 10, 1, 1.0, 1.0)
@@ -106,11 +124,13 @@ class GameWindow < Gosu::Window
     @font.draw("Press '=' to save your score", 200, 400, 1, 1.0, 1.0)
   end
 
+  # Handles menu state of the game.
   def menu
     @state = GAME if Gosu.button_down? Gosu::KB_1
     @state = SCOREBOARD if Gosu.button_down? Gosu::KB_2
   end
 
+  # Handles score state of the game.
   def score
     if text_input.finished?
       @ranking.save(text_input.text, @score)
@@ -118,11 +138,13 @@ class GameWindow < Gosu::Window
     end
   end
 
+  # Calls initial state when the game is over.
   def scoreboard
     self.text_input = nil
     initial_state if Gosu.button_down? Gosu::KB_0
   end
 
+  # Moves falcon according to keyboard input.
   def falcon_input
     @falcon.move_left  if (Gosu.button_down? Gosu::KbLeft) && @falcon.move_left_possible?
     @falcon.move_right if (Gosu.button_down? Gosu::KbRight) && @falcon.move_right_possible?(width, height)
@@ -130,6 +152,7 @@ class GameWindow < Gosu::Window
     @falcon.move_down  if (Gosu.button_down? Gosu::KbDown) && @falcon.move_down_possible?(height)
   end
 
+  # Handles hiero logic, like creating, updating and deleting.
   def handle_hieros
     # Create Hiero
     hiero_spawn_chance = (rand 1000) < 5
@@ -156,6 +179,7 @@ class GameWindow < Gosu::Window
     end
   end
 
+  # Handles enemies logic, like creating, updating and deleting.
   def handle_enemies
     # Create Enemy
     enemy_spawn_chance = (rand 1500) < 5
@@ -180,6 +204,7 @@ class GameWindow < Gosu::Window
     end
   end
 
+  # Handles obstacles logic, like creating, updating and deleting.
   def handle_obstacles
     # Create Obstacle
     obstacle_spawn_chance = (rand 500) < 5
