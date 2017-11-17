@@ -1,5 +1,5 @@
 class Ranking
-  RANKING_PATH = "ranking.txt"
+  RANKING_PATH = "ranking.txt".freeze
 
   def initialize
     @file = File.new(RANKING_PATH, "a+")

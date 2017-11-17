@@ -10,6 +10,6 @@ class TextInput < Gosu::TextInput
   end
 
   def finished?
-    @last_char == "="
+    @last_char == "=" && !text.empty?
   end
 end

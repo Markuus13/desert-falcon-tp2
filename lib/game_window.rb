@@ -8,62 +8,31 @@ class GameWindow < Gosu::Window
 
   def initialize(width, height)
     super width, height
-    self.caption = "Desert Falcon"
     Random.new_seed
 
+    self.caption = "Desert Falcon"
     @background_image = Sprite.new("assets/images/sand_background.jpg")
-    @font = Gosu::Font.new(20)
     @falcon = Falcon.new(width / 4.0, 3 * height / 4.0, 0)
-    @hiero = []
-    @obstacle = []
-    @enemy = []
-    @score = 0
-    @state = MENU
     @font = Gosu::Font.new(self, Gosu.default_font_name, 20)
-    @draw_array = [method(:draw_menu), method(:draw_game), method(:draw_score), method(:draw_scoreboard)]
+    @draw_methods = [method(:draw_menu), method(:draw_game), method(:draw_score),
+                     method(:draw_scoreboard)]
+    initial_state
   end
 
-  def quit
-    close
+  def draw
+    @draw_methods[@state].call
   end
 
   def update
     case @state
     when MENU
-      def draw
-        @draw_array[MENU].call
-      end
-
-      @state = GAME if Gosu.button_down? Gosu::KB_1
-      @state = SCOREBOARD if Gosu.button_down? Gosu::KB_2
-
+      menu
     when GAME
-      def draw
-        @draw_array[GAME].call
-      end
       game_logic
-
     when SCORE
-      self.text_input ||= TextInput.new
-
-      def draw
-        @draw_array[SCORE].call
-      end
-
-      if text_input.finished?
-        @ranking = Ranking.new
-        @ranking.save(text_input.text, @score)
-        @state = SCOREBOARD
-      end
-
+      score
     when SCOREBOARD
-      self.text_input = nil
-
-      def draw
-        @draw_array[SCOREBOARD].call
-      end
-
-      initial_state if Gosu.button_down? Gosu::KB_0
+      scoreboard
     end
   end
 
@@ -166,6 +135,10 @@ class GameWindow < Gosu::Window
     @fps = Gosu.fps.to_s
   end
 
+  def quit
+    close
+  end
+
   private
 
   def button_down(id)
@@ -203,16 +176,36 @@ class GameWindow < Gosu::Window
   def draw_scoreboard
     @font.draw("Desert Falcon - Scoreboard", 200, 0, 1, 1.0, 1.0)
     @font.draw("0 - Main Menu", 0, 30, 1, 1.0, 1.0)
-    x,y = [10, 30]
+    x = 10
+    y = 30
     @ranking.all_scores.each do |rank|
       @font.draw(rank.chomp, x, y += 20, 1, 1.0, 1.0)
     end
   end
 
   def draw_score
+    self.text_input ||= TextInput.new
     @font.draw("Desert Falcon", 250, 10, 1, 1.0, 1.0)
     @font.draw("Your score was #{@score}!", 235, 150, 1, 1.0, 1.0)
-    @font.draw("Write your name to save your score: #{self.text_input.text}", 160, 180, 1, 1.0, 1.0)
+    @font.draw("Write your name to save your score: #{text_input.text}", 160, 180, 1, 1.0, 1.0)
     @font.draw("Press '=' to save your score", 200, 400, 1, 1.0, 1.0)
+  end
+
+  def menu
+    @state = GAME if Gosu.button_down? Gosu::KB_1
+    @state = SCOREBOARD if Gosu.button_down? Gosu::KB_2
+  end
+
+  def score
+    if text_input.finished?
+      @ranking = Ranking.new
+      @ranking.save(text_input.text, @score)
+      @state = SCOREBOARD
+    end
+  end
+
+  def scoreboard
+    self.text_input = nil
+    initial_state if Gosu.button_down? Gosu::KB_0
   end
 end
