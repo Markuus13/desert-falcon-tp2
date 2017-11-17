@@ -31,6 +31,10 @@ On project root run `bundle exec rubocop`.
 
 # How to generate docs
 on project root run `bundle exec yard`
+and `yard graph --dependencies --empty-mixins --full | dot -T pdf -o doc/diagram.pdf`
 
 # How to play the Game
 On project root run `ruby desert_falcon`.
+
+# About YARD
+YARD tool doesn't implement callgraph feature. More information [here](https://github.com/lsegal/yard/issues/67).
