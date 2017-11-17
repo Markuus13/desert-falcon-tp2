@@ -36,110 +36,23 @@ class GameWindow < Gosu::Window
     end
   end
 
-  # Game logic
   def game_logic
-    # Get user inputs
-    # Move Falcon
-    f_box = @falcon.box
-    x_next_left  = f_box.x - @falcon.x_vel
-    y_next_left  = f_box.y - @falcon.y_vel
-    x_next_right = f_box.x + f_box.width + @falcon.x_vel
-    y_next_right = f_box.y + f_box.height + @falcon.y_vel
-    z_next_up    = f_box.y - @falcon.z_vel
-    z_next_down  = f_box.y + f_box.height + @falcon.z_vel
+    falcon_input
+    handle_hieros
+    handle_enemies
+    handle_obstacles
+    gosu_fps
+  end
 
-    @falcon.move_left  if (Gosu.button_down? Gosu::KbLeft)  &&
-        x_next_left  > 0 &&
-        y_next_left  > 0
+  private
 
-    @falcon.move_right if (Gosu.button_down? Gosu::KbRight) &&
-        x_next_right < width &&
-        y_next_right < height
-
-    @falcon.move_up    if (Gosu.button_down? Gosu::KbUp)    &&
-        z_next_up > 0
-    @falcon.move_down  if (Gosu.button_down? Gosu::KbDown)  &&
-        z_next_down < height
-
-    # Create Hiero
-    hiero_spawn_chance = (rand 1000) < 5
-    x_next = width
-    y_next = (rand 200)
-    z_next = (rand 3) - 1
-
-    if @hiero.length < 3
-      @hiero.push(Hiero.new(x_next, y_next, z_next)) if hiero_spawn_chance
-    end
-
-    # Move Hiero
-    @hiero.each(&:update)
-
-    # Detect collision
-    ## Delete hiero if it collides with border
-    @hiero.delete_if { |h| h.box.x <= 0 || h.box.y >= height }
-
-    ## Delete hiero it it collides with falcon
-    @hiero.delete_if do |h|
-      h.notify_collision(@falcon.box) &&
-        @falcon.notify_collision(h.box) &&
-        @score += 10
-    end
-
-    # Create Enemy
-    enemy_spawn_chance = (rand 1500) < 5
-    x_next = width
-    y_next = (rand 200)
-    z_next = (rand 3) - 1
-
-    if @enemy.length < 3
-      @enemy.push(Enemy.new(x_next, y_next, z_next)) if enemy_spawn_chance
-    end
-
-    # Move Enemy
-    @enemy.each(&:update)
-
-    ## Detect collision
-    ## Deletes enemy if it collides with border
-    @enemy.delete_if { |e| e.box.x <= 0 || e.box.y >= height }
-
-    ## Game over if falcon collides with enemy
-    @enemy.each do |e|
-      @state = SCORE if e.notify_collision(@falcon.box) && @falcon.notify_collision(e.box)
-    end
-
-    # Create Obstacle
-    obstacle_spawn_chance = (rand 500) < 5
-    x_next = width
-    y_next = (rand 200)
-    z_next = -1
-
-    if @obstacle.length < 3
-      @obstacle.push(Obstacle.new(x_next, y_next, z_next)) if obstacle_spawn_chance
-    end
-
-    # Move Obstacle
-    @obstacle.each(&:update)
-
-    # Detect collision
-    ## Deletes obstacle if it collides with border
-    @obstacle.delete_if { |o| o.box.x <= 0 || o.box.y >= height }
-
-    ## Game over if falcon collides with obstacle
-    @obstacle.each do |o|
-      if o.notify_collision(@falcon.box) && @falcon.notify_collision(o.box)
-        @state = SCORE
-      end
-    end
-
-    # TODO: remaining updates
+  def gosu_fps
     @fps = Gosu.fps.to_s
   end
 
   def quit
     close
   end
-
-  private
 
   def button_down(id)
     if id == Gosu::KbEscape
@@ -152,9 +65,9 @@ class GameWindow < Gosu::Window
   def initial_state
     @state = MENU
     @score = 0
-    @hiero = []
-    @obstacle = []
-    @enemy = []
+    @hieros = []
+    @obstacles = []
+    @enemies = []
   end
 
   def draw_menu
@@ -168,9 +81,9 @@ class GameWindow < Gosu::Window
     @font.draw("SCORE: #{@score}", 10, 10, 5, 1, 1, 0xff_00ff00)
     @font.draw("FPS: #{@fps}", (width - 80), (height - 20), 5, 1, 1, 0xff_00ff00)
     @falcon.draw
-    @hiero.each(&:draw)
-    @enemy.each(&:draw)
-    @obstacle.each(&:draw)
+    @hieros.each(&:draw)
+    @enemies.each(&:draw)
+    @obstacles.each(&:draw)
   end
 
   def draw_scoreboard
@@ -207,5 +120,108 @@ class GameWindow < Gosu::Window
   def scoreboard
     self.text_input = nil
     initial_state if Gosu.button_down? Gosu::KB_0
+  end
+
+  def falcon_input
+    @falcon.move_left  if (Gosu.button_down? Gosu::KbLeft) && move_left_possible?(@falcon.box)
+    @falcon.move_right if (Gosu.button_down? Gosu::KbRight) && move_right_possible?(@falcon.box)
+    @falcon.move_up    if (Gosu.button_down? Gosu::KbUp) && move_up_possible?(@falcon.box)
+    @falcon.move_down  if (Gosu.button_down? Gosu::KbDown) && move_down_possible?(@falcon.box)
+  end
+
+  def move_left_possible?(falcon_box)
+    x_next_left = falcon_box.x - @falcon.x_vel
+    y_next_left = falcon_box.y - @falcon.y_vel
+    (x_next_left > 0) && (y_next_left > 0)
+  end
+
+  def move_right_possible?(falcon_box)
+    x_next_right = falcon_box.x + falcon_box.width + @falcon.x_vel
+    y_next_right = falcon_box.y + falcon_box.height + @falcon.y_vel
+    (x_next_right < width) && (y_next_right < height)
+  end
+
+  def move_up_possible?(falcon_box)
+    z_next_up = falcon_box.y - @falcon.z_vel
+    z_next_up > 0
+  end
+
+  def move_down_possible?(falcon_box)
+    z_next_down = falcon_box.y + falcon_box.height + @falcon.z_vel
+    z_next_down < height
+  end
+
+  def handle_hieros
+    # Create Hiero
+    hiero_spawn_chance = (rand 1000) < 5
+    x_next = width
+    y_next = (rand 200)
+    z_next = (rand 3) - 1
+
+    if @hieros.length < 3
+      @hieros.push(Hiero.new(x_next, y_next, z_next)) if hiero_spawn_chance
+    end
+
+    # Move Hiero
+    @hieros.each(&:update)
+
+    # Detect collision
+    ## Delete hiero if it collides with border
+    @hieros.delete_if { |hiero| hiero.box.x <= 0 || hiero.box.y >= height }
+
+    ## Delete hiero if it collides with falcon
+    @hieros.delete_if do |hiero|
+      hiero.notify_collision(@falcon.box) &&
+        @falcon.notify_collision(hiero.box) &&
+        @score += 10
+    end
+  end
+
+  def handle_enemies
+    # Create Enemy
+    enemy_spawn_chance = (rand 1500) < 5
+    x_next = width
+    y_next = (rand 200)
+    z_next = (rand 3) - 1
+
+    if @enemies.length < 3
+      @enemies.push(Enemy.new(x_next, y_next, z_next)) if enemy_spawn_chance
+    end
+
+    # Move Enemy
+    @enemies.each(&:update)
+
+    ## Detect collision
+    ## Deletes enemy if it collides with border
+    @enemies.delete_if { |enemy| enemy.box.x <= 0 || enemy.box.y >= height }
+
+    ## Game over if falcon collides with enemy
+    @enemies.each do |enemy|
+      @state = SCORE if enemy.notify_collision(@falcon.box) && @falcon.notify_collision(enemy.box)
+    end
+  end
+
+  def handle_obstacles
+    # Create Obstacle
+    obstacle_spawn_chance = (rand 500) < 5
+    x_next = width
+    y_next = (rand 200)
+    z_next = -1
+
+    if @obstacles.length < 3
+      @obstacles.push(Obstacle.new(x_next, y_next, z_next)) if obstacle_spawn_chance
+    end
+
+    # Move Obstacle
+    @obstacles.each(&:update)
+
+    # Detect collision
+    ## Deletes obstacle if it collides with border
+    @obstacles.delete_if { |obstacle| obstacle.box.x <= 0 || obstacle.box.y >= height }
+
+    ## Game over if falcon collides with obstacle
+    @obstacles.each do |obstacle|
+      @state = SCORE if obstacle.notify_collision(@falcon.box) && @falcon.notify_collision(obstacle.box)
+    end
   end
 end
