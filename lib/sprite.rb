@@ -1,6 +1,5 @@
 require "gosu"
 
-
 # Class Sprite that inherits Gosu::Image handles image files from game objects.
 class Sprite < Gosu::Image
   # Initialize Sprite object that inherits Gosu::Image.

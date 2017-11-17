@@ -7,9 +7,9 @@ class GameObject
   # Initialize GameObject object with it's generic attributes.
   # @param x_pos [Integer] x coordinate where the game object will be created
   # @param y_pos [Integer] y coordinate
-  # @param z_pos [Integer] z coordinate
+  # @param _z_pos [Integer] z coordinate
   # @param file_name [String] image file name for the object
-  def initialize(x_pos, y_pos, z_pos, file_name)
+  def initialize(x_pos, y_pos, _z_pos, file_name)
     @image = Sprite.new(file_name)
     @box = Box.new(x_pos, y_pos, @image.width, @image.height)
   end
