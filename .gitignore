@@ -57,3 +57,6 @@ build-iPhoneSimulator/
 
 # Rspec
 .rspec_status
+
+# Project specific
+ranking.txt

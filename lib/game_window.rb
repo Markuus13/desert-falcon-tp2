@@ -33,6 +33,7 @@ class GameWindow < Gosu::Window
       def draw
         @draw_array[MENU].call
       end
+
       @state = GAME if Gosu.button_down? Gosu::KB_1
       @state = SCOREBOARD if Gosu.button_down? Gosu::KB_2
 
@@ -44,16 +45,24 @@ class GameWindow < Gosu::Window
 
     when SCORE
       self.text_input ||= TextInput.new
+
       def draw
         @draw_array[SCORE].call
       end
-      @state = SCOREBOARD if text_input.finished?
+
+      if text_input.finished?
+        @ranking = Ranking.new
+        @ranking.save(text_input.text, @score)
+        @state = SCOREBOARD
+      end
 
     when SCOREBOARD
       self.text_input = nil
+
       def draw
         @draw_array[SCOREBOARD].call
       end
+
       initial_state if Gosu.button_down? Gosu::KB_0
     end
   end
@@ -194,6 +203,10 @@ class GameWindow < Gosu::Window
   def draw_scoreboard
     @font.draw("Desert Falcon - Scoreboard", 200, 0, 1, 1.0, 1.0)
     @font.draw("0 - Main Menu", 0, 30, 1, 1.0, 1.0)
+    x,y = [10, 30]
+    @ranking.all_scores.each do |rank|
+      @font.draw(rank.chomp, x, y += 20, 1, 1.0, 1.0)
+    end
   end
 
   def draw_score
