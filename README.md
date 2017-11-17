@@ -29,5 +29,8 @@ On project root run `bundle exec rspec`.
 # How to run static code analyzer
 On project root run `bundle exec rubocop`.
 
+# How to generate docs
+on project root run `bundle exec yard`
+
 # How to play the Game
 On project root run `ruby desert_falcon`.
