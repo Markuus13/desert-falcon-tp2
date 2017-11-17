@@ -16,6 +16,16 @@ class Ranking
     File.open(RANKING_PATH, "r") do |f|
       f.each_line { |line| @scores << line }
     end
-    @scores
+    order(@scores)
+  end
+
+  private
+
+  def order(scores)
+    @scores = @scores.map { |elem| elem.split(" - ") }
+                     .to_h
+                     .sort_by { |_key, value| value.to_i }
+                     .map { |elem| elem.join(" - ") }
+                     .reverse
   end
 end
