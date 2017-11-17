@@ -46,4 +46,26 @@ class Falcon < GameObject
       sleep(0.2)
     end
   end
+
+  def move_left_possible?
+    x_next_left = @box.x - x_vel
+    y_next_left = @box.y - y_vel
+    (x_next_left > 0) && (y_next_left > 0)
+  end
+
+  def move_right_possible?(width, height)
+    x_next_right = @box.x + @box.width + x_vel
+    y_next_right = @box.y + @box.height + y_vel
+    (x_next_right < width) && (y_next_right < height)
+  end
+
+  def move_up_possible?
+    z_next_up = @box.y - z_vel
+    z_next_up > 0
+  end
+
+  def move_down_possible?(height)
+    z_next_down = @box.y + @box.height + z_vel
+    z_next_down < height
+  end
 end

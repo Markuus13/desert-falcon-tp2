@@ -123,32 +123,10 @@ class GameWindow < Gosu::Window
   end
 
   def falcon_input
-    @falcon.move_left  if (Gosu.button_down? Gosu::KbLeft) && move_left_possible?(@falcon.box)
-    @falcon.move_right if (Gosu.button_down? Gosu::KbRight) && move_right_possible?(@falcon.box)
-    @falcon.move_up    if (Gosu.button_down? Gosu::KbUp) && move_up_possible?(@falcon.box)
-    @falcon.move_down  if (Gosu.button_down? Gosu::KbDown) && move_down_possible?(@falcon.box)
-  end
-
-  def move_left_possible?(falcon_box)
-    x_next_left = falcon_box.x - @falcon.x_vel
-    y_next_left = falcon_box.y - @falcon.y_vel
-    (x_next_left > 0) && (y_next_left > 0)
-  end
-
-  def move_right_possible?(falcon_box)
-    x_next_right = falcon_box.x + falcon_box.width + @falcon.x_vel
-    y_next_right = falcon_box.y + falcon_box.height + @falcon.y_vel
-    (x_next_right < width) && (y_next_right < height)
-  end
-
-  def move_up_possible?(falcon_box)
-    z_next_up = falcon_box.y - @falcon.z_vel
-    z_next_up > 0
-  end
-
-  def move_down_possible?(falcon_box)
-    z_next_down = falcon_box.y + falcon_box.height + @falcon.z_vel
-    z_next_down < height
+    @falcon.move_left  if (Gosu.button_down? Gosu::KbLeft) && @falcon.move_left_possible?
+    @falcon.move_right if (Gosu.button_down? Gosu::KbRight) && @falcon.move_right_possible?(width, height)
+    @falcon.move_up    if (Gosu.button_down? Gosu::KbUp) && @falcon.move_up_possible?
+    @falcon.move_down  if (Gosu.button_down? Gosu::KbDown) && @falcon.move_down_possible?(height)
   end
 
   def handle_hieros
