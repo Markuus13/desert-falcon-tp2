@@ -1,3 +1,6 @@
+require 'simplecov'
+SimpleCov.start
+
 require "byebug"
 
 RSpec.configure do |config|

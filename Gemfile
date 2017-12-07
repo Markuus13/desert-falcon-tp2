@@ -13,4 +13,5 @@ gem "yard", "~> 0.8.7.6"
 
 group :test do
   gem "rspec", "~> 3.6"
+  gem 'simplecov', :require => false
 end
