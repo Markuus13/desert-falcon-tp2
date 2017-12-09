@@ -1,5 +1,6 @@
 require "spec_helper"
 require "falcon"
+require "hiero"
 
 RSpec.describe Falcon do
   describe "#initialize" do
@@ -78,6 +79,57 @@ RSpec.describe Falcon do
         @pos_z_after_move_down = @falcon.z
         expect(@pos_z_after_move_down).to eq(@pos_z_before_move_down - 1)
       end
+    end
+  end
+
+  describe "#check_movement_left" do
+    before(:each) do
+      @falcon = Falcon.new(1, 10, 0)
+    end
+
+    it "tries to move left" do
+      expect(@falcon.move_left_possible? == false)
+    end
+  end
+
+  describe "#check_movement_right" do
+    before(:each) do
+      @falcon = Falcon.new(600, 10, 0)
+    end
+
+    it "tries to move right" do
+      expect(@falcon.move_right_possible?(640, 480) == false)
+    end
+  end
+
+  describe "#check_movement_up" do
+    before(:each) do
+      @falcon = Falcon.new(1, 1, 0)
+    end
+
+    it "tries to move up" do
+      expect(@falcon.move_up_possible? == false)
+    end
+  end
+
+  describe "#check_movement_down" do
+    before(:each) do
+      @falcon = Falcon.new(20, 450  , 0)
+    end
+
+    it "tries to move down" do
+      expect(@falcon.move_down_possible?(480) == false)
+    end
+  end
+
+  describe "#check_collision_with_hiero" do
+    before(:each) do
+      @falcon = Falcon.new(50, 50, 0)
+      @hiero = Hiero.new(55, 55, 0)
+    end
+
+    it "detects collision between falcon and hiero" do
+      expect(@falcon.notify_collision(@hiero.box))
     end
   end
 end
